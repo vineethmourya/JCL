@@ -1,0 +1,116 @@
+//IF1DC3IC JOB 80218,'VINEETH',NOTIFY=&SYSUID,CLASS=8                   
+//*---------------------------------------------------------------------
+//* PRECOMPILE,COMPILE,LINKEDIT,BIND-PACKAGE,BIND-PLAN & RUN PGM        
+//*---------------------------------------------------------------------
+//SYMBOLS  SET PGM=PDBATPRT                                             
+//*                                                                     
+//*---------------------------------------------------------------------
+//S0       EXEC PGM=DSNHPC,PARM='HOST(IBMCOB),SOURCE,APOST'             
+//*---------------------------------------------------------------------
+//STEPLIB  DD  DISP=SHR,DSN=SYSDB2.DW00.SSPGM                           
+//SYSPRINT DD  SYSOUT=*                                                 
+//SYSTERM  DD  SYSOUT=*                                                 
+//SYSUDUMP DD  SYSOUT=*                                                 
+//SYSUT1   DD  SPACE=(TRK,(15,15)),UNIT=DISK                            
+//SYSUT2   DD  SPACE=(TRK,(15,15)),UNIT=DISK                            
+//*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>PGMNAME                        
+//SYSIN    DD  DISP=SHR,DSN=IF1DC3I.A.COB(&PGM)                         
+//SYSLIB   DD  DISP=SHR,DSN=SW.ENDV.SYU.PROD.FEPD.CPY                   
+//         DD  DISP=SHR,DSN=SW.ENDV.SYU.PROD.FEPD.DCL                   
+//SYSCIN   DD  DSN=&&DSNHOUT,DISP=(NEW,PASS),UNIT=DISK,                 
+//             SPACE=(TRK,(15,15))                                      
+//DBRMLIB  DD  DSN=IF1DC3I.A.DBRM(&PGM),DISP=SHR                        
+//*                                                                     
+//*---------------------------------------------------------------------
+//S1     EXEC PGM=IGYCRCTL,REGION=0M                                    
+//*---------------------------------------------------------------------
+//STEPLIB  DD  DISP=SHR,DSN=SYS1.COBOL42.SIGYCOMP                       
+//SYSIN    DD  DISP=(OLD,DELETE),DSN=&&DSNHOUT                          
+//SYSLIB   DD  DISP=SHR,DSN=SW.ENDV.SYU.PROD.FEPD.CPY                   
+//         DD  DISP=SHR,DSN=SW.ENDV.SYU.PROD.FEPD.DCL                   
+//SYSPRINT DD  SYSOUT=*                                                 
+//SYSLIN   DD  DSNAME=&&LOADSET,UNIT=SYSALLDA,                          
+//             DISP=(MOD,PASS),SPACE=(TRK,(3,3)),                       
+//             DCB=(BLKSIZE=0)                                          
+//SYSUT1   DD  UNIT=SYSALLDA,SPACE=(CYL,(1,1))                          
+//SYSUT2   DD  UNIT=SYSALLDA,SPACE=(CYL,(1,1))                          
+//SYSUT3   DD  UNIT=SYSALLDA,SPACE=(CYL,(1,1))                          
+//SYSUT4   DD  UNIT=SYSALLDA,SPACE=(CYL,(1,1))                          
+//SYSUT5   DD  UNIT=SYSALLDA,SPACE=(CYL,(1,1))                          
+//SYSUT6   DD  UNIT=SYSALLDA,SPACE=(CYL,(1,1))                          
+//SYSUT7   DD  UNIT=SYSALLDA,SPACE=(CYL,(1,1))                          
+//SYSUT8   DD  UNIT=SYSALLDA,SPACE=(CYL,(1,1))                          
+//SYSUT9   DD  UNIT=SYSALLDA,SPACE=(CYL,(1,1))                          
+//SYSUT10  DD  UNIT=SYSALLDA,SPACE=(CYL,(1,1))                          
+//SYSUT11  DD  UNIT=SYSALLDA,SPACE=(CYL,(1,1))                          
+//SYSUT12  DD  UNIT=SYSALLDA,SPACE=(CYL,(1,1))                          
+//SYSUT13  DD  UNIT=SYSALLDA,SPACE=(CYL,(1,1))                          
+//SYSUT14  DD  UNIT=SYSALLDA,SPACE=(CYL,(1,1))                          
+//SYSUT15  DD  UNIT=SYSALLDA,SPACE=(CYL,(1,1))                          
+//*                                                                     
+//*---------------------------------------------------------------------
+//S2     EXEC PGM=IEWBLINK,COND=(8,LT,S1),REGION=0M                     
+//*---------------------------------------------------------------------
+//SYSLIB   DD  DISP=SHR,DSN=SYS1.SCEELKED                               
+//         DD  DISP=SHR,DSN=SYSDB2.DW00.SSPGM                           
+//SYSPRINT DD  SYSOUT=*                                                 
+//SYSLIN   DD  DSNAME=&&LOADSET,DISP=(OLD,DELETE)                       
+//*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>PGMNAME                        
+//SYSLMOD  DD  DSNAME=IF1DC3I.A.LOD(&PGM),                              
+//             SPACE=(TRK,(10,10,1)),                                   
+//             UNIT=SYSALLDA,DISP=(MOD,PASS)                            
+//SYSUT1   DD  UNIT=SYSALLDA,SPACE=(TRK,(10,10))                        
+//*                                                                     
+//*---------------------------------------------------------------------
+//S3       EXEC  PGM=IKJEFT01,COND=(8,LT,S2)                            
+//STEPLIB  DD  DSN=SYSDB2.DW00.SSPGM,DISP=SHR                           
+//SYSTSPRT DD  SYSOUT=*                                                 
+//SYSPRINT DD  SYSOUT=*                                                 
+//SYSUDUMP DD  SYSOUT=*                                                 
+//DBRMLIB  DD  DSN=IF1DC3I.A.DBRM,DISP=SHR                              
+//SYSTSIN  DD  *                                                        
+DSN  SYSTEM     (DW00)                                                  
+BIND PACKAGE    (PDC001) -                                              
+     OWNER      (PD1@T12)   -                                           
+          MEMBER     (PDBATPRT) -                                            
+     QUALIFIER  (PD0@LD2)   -                                           
+     ACTION     (REPLACE)   -                                           
+     VALIDATE   (BIND)      -                                           
+     EXPLAIN    (NO)        -                                           
+     SQLERROR   (NOPACKAGE)                                             
+END                                                                     
+/*                                                                      
+//*                                                                     
+//*                                                                     
+//*---------------------------------------------------------------------
+//S4       EXEC  PGM=IKJEFT01,COND=(8,LT,S3)                            
+//STEPLIB  DD  DSN=SYSDB2.DW00.SSPGM,DISP=SHR                           
+//SYSTSPRT DD  SYSOUT=*                                                 
+//SYSUDUMP DD  SYSOUT=*                                                 
+//SYSPRINT DD  SYSOUT=*                                                 
+//*DBRMLIB  DD  DSN=IF1DC3I.A.DBRM,DISP=SHR                             
+//SYSTSIN  DD  *                                                        
+DSN SYSTEM (DW00)                                                       
+   BIND  PLAN(PDBATPRT) OWNER(PD1@T12) QUALIFIER (PD0@LD2) -            
+   PKLIST(PDC001.*)                               -                     
+   ACTION(REPLACE)  RETAIN  VALIDATE(BIND)  ISOLATION(CS)               
+END                                                                     
+/*                                                                      
+//                                                                      
+//*---------------------------------------------------------------------
+//S5       EXEC PGM=IKJEFT01                                            
+//*---------------------------------------------------------------------
+//STEPLIB  DD DISP=SHR,DSN=IF1DC3I.A.LOD                                
+//         DD  DSN=SYSDB2.DW00.SSPGM,DISP=SHR                           
+//SYSTSPRT DD  SYSOUT=*                                                 
+//DSNTRACE DD  SYSOUT=*                                                 
+//SYSPRINT DD  SYSOUT=*                                                 
+//SYSUDUMP DD  SYSOUT=N,FREE=CLOSE                                      
+//SYSOUT   DD  SYSOUT=*                                                 
+//SYSTSIN  DD  *                                                        
+ DSN SYSTEM(DW00)                                                       
+  RUN PROGRAM(PRQFNC)         -           
+     PLAN(PRQFNCP1)                      
+ END                                     
+ /*    
+ 
