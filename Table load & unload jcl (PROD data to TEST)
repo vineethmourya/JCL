@@ -1,0 +1,71 @@
+//IF1DC3IU JOB 80218,'VINEETH',NOTIFY=&SYSUID,CLASS=8,                  
+// RESTART=S3                                                           
+//*---------------------------------------------------------------------
+//* PREDELETE                                                           
+//*---------------------------------------------------------------------
+//S1       EXEC PGM=IEFBR14                                             
+//DELETE1  DD UNIT=SYSDA,SPACE=(TRK,0),DISP=(MOD,DELETE),               
+//            DSN=TE.PD.VINEETH.XREC00                                  
+//DELETE2  DD UNIT=SYSDA,SPACE=(TRK,0),DISP=(MOD,DELETE),               
+//            DSN=TE.PD.VINEETH.XPUNCH                                  
+//*                                                                     
+//*---------------------------------------------------------------------
+//* UNLOAD TABLE DATA TO FILE                                           
+//*---------------------------------------------------------------------
+//S2       EXEC PGM=IKJEFT01                                            
+//STEPLIB  DD DSN=SYSDB2.DY00.SSPGM,DISP=SHR                            
+//SYSTSPRT DD SYSOUT=*                                                  
+//SYSTSIN  DD *                                                         
+    DSN SYSTEM(DY00)                                                    
+    RUN PROGRAM(DSNTIAUL) PLAN(DSNTIAUL) PARM('SQL')                    
+/*                                                                      
+//SYSPRINT DD SYSOUT=*                                                  
+//SYSUDUMP DD SYSOUT=*                                                  
+//SYSREC00 DD UNIT=(DISK,3),VOL=(,,,15),                                
+//            SPACE=(CYL,(600,600),RLSE),                               
+//            DISP=(,CATLG),MGMTCLAS=TESTSTD,                           
+//            DSN=TE.PD.VINEETH.XREC00                                  
+//SYSPUNCH DD UNIT=SYSDA,SPACE=(CYL,(600,600),RLSE),                    
+//            DISP=(,CATLG),MGMTCLAS=TESTSTD,                           
+//            DSN=TE.PD.VINEETH.XPUNCH                                  
+//SYSIN    DD *                                                         
+ /*G03  BACKUP*/                                                        
+    SELECT * FROM PDADM.PDT_G04_STAMP;                                  
+/*                                                                      
+//*                                                                     
+//*---------------------------------------------------------------------
+//* COUNT & DELETE TABLE DATA                                           
+//*---------------------------------------------------------------------
+//S3       EXEC PGM=IKJEFT01                                            
+//STEPLIB  DD DSN=SYSDB2.DW00.SSPGM,DISP=SHR                            
+//SYSTSPRT DD SYSOUT=*                                                  
+//DSNTRACE DD SYSOUT=*                                                  
+//SYSPRINT DD SYSOUT=*                                                  
+//SYSUDUMP DD SYSOUT=*                                                  
+//SYSOUT   DD SYSOUT=*                                                  
+//SYSTSIN  DD *                                                         
+DSN SYSTEM(DW00)                                                        
+RUN PROGRAM(DSNTEP2) PLAN(DSNTEP2)                                      
+END                                                                     
+/*                                                                      
+//SYSIN    DD *                                                         
+SELECT COUNT(*) FROM PD0@LD2.PDT_G04_STAMP;                             
+DELETE FROM PD0@LD2.PDT_G04_STAMP;                                      
+/*                                                                      
+//*                                                                     
+//*---------------------------------------------------------------------
+//* LOAD TABLE DATA                                                     
+//*---------------------------------------------------------------------
+//S4       EXEC PGM=DSNUTILB,REGION=4M,PARM=DW00                        
+//STEPLIB  DD DSN=SYSDB2.DW00.SSPGM,DISP=SHR                            
+//SYSREC00 DD DISP=SHR,DSN=TE.PD.VINEETH.XREC00                         
+//SYSIN    DD DISP=SHR,DSN=TE.PD.VINEETH.XPUNCH                         
+//SORTWK01 DD UNIT=DISK,SPACE=(CYL,(500,100),RLSE)                      
+//SORTWK02 DD UNIT=DISK,SPACE=(CYL,(500,100),RLSE)                      
+//SORTWK03 DD UNIT=DISK,SPACE=(CYL,(500,100),RLSE)                      
+//SYSUT1   DD UNIT=DISK,SPACE=(TRK,(100,100),RLSE)                      
+//SORTOUT  DD UNIT=DISK,SPACE=(TRK,(600,500),RLSE)                      
+//SYSMAP   DD UNIT=DISK,SPACE=(TRK,(100,100),RLSE)                      
+//SYSPRINT DD SYSOUT=*                                                  
+//UTPRINT  DD SYSOUT=*                                                  
+//SYSUDUMP DD SYSOUT=N,FREE=CLOSE                                       
