@@ -1,0 +1,111 @@
+//IF1DC3IJ JOB 80218,'TEST-JOB',NOTIFY=IF1DC3I,PRTY=15                  
+//*RESTART=S3                                                           
+//*---------------------------------------------------------------------
+//* DELETE FILE IF EXISTS,CREATE NEW                                    
+//*---------------------------------------------------------------------
+//S1     EXEC PGM=IEFBR14                                               
+//D1     DD DISP=(MOD,DELETE),DSN=TE.PD.VINEETH.TEST2,                  
+//          UNIT=SYSDA,SPACE=(TRK,0)                                    
+//S2     EXEC PGM=IEFBR14                                               
+//C1     DD DISP=(NEW,CATLG,DELETE),DSN=TE.PD.VINEETH.TEST2,            
+//          UNIT=DISK,MGMTCLAS=TESTSTD,SPACE=(TRK,(1000,1000),RLSE),    
+//          DCB=(RECFM=FB,LRECL=1000,BLKSIZE=0)                         
+//*---------------------------------------------------------------------
+//* CREATE A SINGLE OUTPUT FILE                                         
+//*---------------------------------------------------------------------
+//DFSRT EXEC PGM=ICETOOL                                                
+//TOOLMSG DD SYSOUT=*                                                   
+//DFSMSG  DD SYSOUT=*                                                   
+//IN1     DD DISP=SHR,DSN=NE.PD.CONCUR.BKP(-1)                          
+//IN2     DD DISP=SHR,DSN=NE.PD.PD200110.AMEX(-1)                       
+//IN3     DD DISP=SHR,DSN=NE.PD.PD240010.PEOPLENT(-1)                   
+//IN4     DD DISP=SHR,DSN=NE.PD.PD250010.IMCS(-1)                       
+//IN5     DD DISP=SHR,DSN=NE.PD.PD270110.EXTRAC(-1)                     
+//IN6     DD DISP=SHR,DSN=NE.PD.PD290010.ESOGCOL(-1)                    
+//IN7     DD DISP=SHR,DSN=NE.PD.PD300010.ESOGDAV(-1)                    
+//IN8     DD DISP=SHR,DSN=NE.PD.PD310010.WANE797(-1)                    
+//IN9     DD DISP=SHR,DSN=NE.PD.MBOX.SEND.ZSNENE73(-1)                  
+//IN10    DD DISP=SHR,DSN=NE.PD.PD280010.CDOPS(-1)                      
+//IN11    DD DISP=SHR,DSN=NE.PD.ARIBA.INPUT.ACCOUNT.BKP(-1)             
+//IN12    DD DISP=SHR,DSN=NE.PD.ARIBA.INPUT.BANK.BKP(-1)                
+//IN13    DD DISP=SHR,DSN=NE.PD.ARIBA.INPUT.DETIAL.BKP(-1)              
+//IN14    DD DISP=SHR,DSN=NE.PD.ARIBA.INPUT.HEADER.BKP(-1)              
+//IN15    DD DISP=SHR,DSN=NE.PD.PD180115.ACESII(-1)                     
+//IN16    DD DISP=SHR,DSN=NE.PD.MBOX.SEND.ZSNENE59(-1)                  
+//IN17    DD DISP=SHR,DSN=NE.PD.MBOX.SEND.ZSNENEB0(-1)                  
+//IN18    DD DISP=SHR,DSN=NE.PD.MBOX.SEND.ZSNENEB2(-1)                  
+//IN19    DD DISP=SHR,DSN=NE.PD.MBOX.SEND.ZSNENEB1(-1)                  
+//IN20    DD DISP=SHR,DSN=NE.PD.PD350240.ATHORIS(-1)    
+//IN21    DD DISP=SHR,DSN=NE.PD.AAESPOD(-1)             
+//IN22    DD DISP=SHR,DSN=NE.PD.RG010686.GAPS(-1)       
+//IN23    DD DISP=SHR,DSN=NE.PD.PD230410.CORA(-1)       
+//IN24    DD DISP=SHR,DSN=NE.PD.PD230705.WIPS(-1)       
+//IN25    DD DISP=SHR,DSN=NE.PD.PD230805.PCAM(-1)       
+//IN26    DD DISP=SHR,DSN=NE.PD.PD230905.GMIPOS(-1)     
+//IN27    DD DISP=SHR,DSN=NE.PD.PD220110.EDIDB.IN(-1)   
+//IN28    DD DISP=SHR,DSN=NE.PD.PD220210.EDIDREBA.IN(-1)
+//IN29    DD DISP=SHR,DSN=NE.PD.PD220310.MIDLAND(-1)    
+//OUT  DD DISP=MOD,DSN=TE.PD.VINEETH.TEST2              
+//TOOLIN DD *                                           
+COPY FROM(IN1) TO(OUT)                                  
+COPY FROM(IN2) TO(OUT) USING(CTL1)                      
+COPY FROM(IN3) TO(OUT) USING(CTL1)                      
+COPY FROM(IN4) TO(OUT) USING(CTL1)                      
+COPY FROM(IN5) TO(OUT) USING(CTL1)                      
+COPY FROM(IN6) TO(OUT) USING(CTL1)                      
+COPY FROM(IN7) TO(OUT) USING(CTL1)                      
+COPY FROM(IN8) TO(OUT) USING(CTL1)                      
+COPY FROM(IN9) TO(OUT) USING(CTL1)                      
+COPY FROM(IN10) TO(OUT) USING(CTL1)                     
+COPY FROM(IN11) TO(OUT) USING(CTL1)                     
+COPY FROM(IN12) TO(OUT) USING(CTL1)                     
+COPY FROM(IN13) TO(OUT) USING(CTL1)                     
+COPY FROM(IN14) TO(OUT) USING(CTL1)                     
+COPY FROM(IN15) TO(OUT) USING(CTL1)                     
+COPY FROM(IN16) TO(OUT) USING(CTL1)                     
+COPY FROM(IN17) TO(OUT) USING(CTL1)                     
+COPY FROM(IN18) TO(OUT) USING(CTL1)                     
+COPY FROM(IN19) TO(OUT) USING(CTL1)                     
+COPY FROM(IN20) TO(OUT) USING(CTL1)                     
+COPY FROM(IN21) TO(OUT) USING(CTL1)                     
+COPY FROM(IN22) TO(OUT) USING(CTL1)                     
+COPY FROM(IN23) TO(OUT) USING(CTL1)                     
+COPY FROM(IN24) TO(OUT) USING(CTL1)                     
+COPY FROM(IN25) TO(OUT) USING(CTL1)                     
+COPY FROM(IN26) TO(OUT) USING(CTL1)                     
+COPY FROM(IN27) TO(OUT) USING(CTL1)                                     
+COPY FROM(IN28) TO(OUT) USING(CTL1)                                     
+COPY FROM(IN29) TO(OUT) USING(CTL1)                                     
+/*                                                                      
+//CTL1CNTL DD *                                                         
+  INREC OVERLAY=(1000:X)                                                
+/*                                                                      
+//*---------------------------------------------------------------------
+//*SEARCH FOR THE STRING IN SINGLE O/P FILE                             
+//*---------------------------------------------------------------------
+//S3     EXEC PGM=ISRSUPC,PARM=(SRCHCMP,'')                             
+//NEWDD  DD DSN=TE.PD.VINEETH.TEST2,DISP=SHR                            
+//OUTDD  DD SYSOUT=*                                                    
+//SYSIN  DD *                                                           
+SRCHFOR  'EC060225WV'                                                   
+SRCHFOR  'EC060224AA'                                                   
+SRCHFOR  '520100234'                                                    
+SRCHFOR  '632205259'                                                    
+SRCHFOR  '9PUDIS6244'                                                   
+SRCHFOR  '7002261846'                                                   
+SRCHFOR  '9FI11274'                                                     
+SRCHFOR  'DBC24459'                                                     
+SRCHFOR  'GDFRO00357'                                                   
+SRCHFOR  'GDFOA03157'                                                   
+SRCHFOR  'GCMFI02998'                                                   
+SRCHFOR  'GCFOG06814'                                                   
+SRCHFOR  'COFOB03459'                                                   
+SRCHFOR  'COFOG12724'                                                   
+SRCHFOR  'DBC1201C'                                                     
+SRCHFOR  'DBC2008C'                                                     
+SRCHFOR  '35540353R'                                                    
+SRCHFOR  '86990023R'                                                    
+SRCHFOR  'AR00170212'                                                   
+SRCHFOR  'AR00170144'                                                   
+SRCHFOR  'GAPS'                                                         
+/*                                                                      
