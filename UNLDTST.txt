@@ -1,0 +1,24 @@
+//IF110X3U JOB (1,90240,NPD-271),FCSS,                                  00010000
+//         MSGCLASS=H,NOTIFY=&SYSUID                                    00020000
+//*MAIN   CLASS=DSN3BTCH,FAILURE=CANCEL                                 00030000
+//UNLDD03  EXEC  PGM=ADUUMAIN,REGION=4096K,DYNAMNBR=20,                 00040000
+//             PARM='DSN3,,NEW,,MSGLEVEL(1)'                            00050000
+//STEPLIB  DD  DSN=SYSDB2.DSN3.VENDOR.SSPGM,DISP=SHR                    00060000
+//         DD  DSN=SYSDB2.DSN3.SSPGM,DISP=SHR                           00070000
+//SYSPRINT DD  SYSOUT=*                                                 00080000
+//SYSUDUMP DD  SYSOUT=*                                                 00090000
+//UTPRINT  DD  SYSOUT=*                                                 00100000
+//SORTWK01 DD  DISP=(NEW,DELETE),UNIT=SYSDA,SPACE=(CYL,(500,100))       00110000
+//SORTWK02 DD  DISP=(NEW,DELETE),UNIT=SYSDA,SPACE=(CYL,(500,100))       00120000
+//SORTWK03 DD  DISP=(NEW,DELETE),UNIT=SYSDA,SPACE=(CYL,(500,100))       00130000
+//SYSCNTL  DD  SYSOUT=*                                                 00140000
+//SYSREC   DD  DSN=IF110X3.PROD.UNLD.SMMPD06(+1),                       00150000
+//             DISP=(NEW,CATLG,DELETE),                                 00160000
+//             MGMTCLAS=GDG,                                            00170000
+//             UNIT=SYSDA,SPACE=(CYL,(700,500),RLSE)                    00180000
+//SYSIN    DD  *                                                        00190000
+ UNLOAD SHRLEVEL REFERENCE                                              00200000
+        CNTLCARDS DB2LOAD                                               00210000
+        SELECT * FROM LPU@TDB.SMMPD06_PART_TYPE                         00220000
+/*                                                                      00230000
+

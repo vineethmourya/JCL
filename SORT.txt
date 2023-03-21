@@ -1,0 +1,17 @@
+//IF110X3S JOB (1,90240,NPD-271),FCSS,                                  00010003
+//         MSGCLASS=H,NOTIFY=&SYSUID                                    00020003
+//STEP001  EXEC  PGM=SORT                                               00060003
+//SORTIN   DD  DISP=SHR,DSN=PA.PA0067.PA0067UY.DATA.SORT.G0226V00       00070003
+//SORTOUT  DD  DSN=PA.TEST.PA0067.PA0067UY.VINEETH(+1),                 00080003
+//             DISP=(NEW,CATLG,DELETE),DCB=(RECFM=FB,LRECL=204),        00090003
+//             SPACE=(TRK,(1500,300),RLSE)                              00100003
+//*            MGMTCLAS=GDG,                                            00110003
+//*UTREC FIELDS=(1:C' ',2:C' ',3:C"'",4:1,7,11:C'',')                   00130003
+//*ORT FIELDS=COPY,STOPAFT=1000                                         00140003
+//SYSIN    DD  *                                                        00150003
+  SORT FIELDS=COPY                                                      00160003
+/*                                                                      00170003
+//SYSPRINT DD  SYSOUT=*                                                 00180003
+//SYSUDUMP DD  SYSOUT=*                                                 00190003
+//SYSOUT   DD  SYSOUT=*                                                 00200003
+
