@@ -2,7 +2,6 @@
 //         MSGCLASS=H,NOTIFY=&SYSUID                                    00020001
 //STEP1 EXEC PGM=IDCAMS                                                 00050000
 //SYSPRINT DD SYSOUT=*                                                  00060000
-//*EFINE GDG(NAME(PA.TEST.PA0067.PA0067MD.AUDIT) -                      00061002
 //SYSIN DD *                                                            00070000
   DEFINE GDG(NAME(PA.TEST.PA0067.PA0067LS.AUDIT) -                      00080003
   LIMIT(255) -                                                          00090000
@@ -16,4 +15,3 @@
 //SYSABOUT DD  SYSOUT=*                                                 00170000
 //SYSMSG   DD  SYSOUT=*                                                 00180000
 //SYSUDUMP DD  SYSOUT=*                                                 00190000
-
