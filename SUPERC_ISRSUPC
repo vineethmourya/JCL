@@ -1,0 +1,20 @@
+PROBLEM 1: SUPERC 3.13 COMPARES AND SHOWS ONLY 133 LRECL.  NOT ENTIRE INPUT RECORD IS SHOWN.  HOW DO I SEE 5000 RECL INPUT FILE IF CHANGE IS AT 4500 LRECL.
+SOLUTION 1: USE UPDPDEL AND DELDD (FOR DELTA FILE).  COMPLETE COMPARED LINE WILL BE VISIBLE IN DELDD.
+//IF110X3U JOB (1,90240,TSLB),'FCSS',                                   
+//         MSGCLASS=H,NOTIFY=&SYSUID                                    
+//SUPERC  EXEC PGM=ISRSUPC,                                            *
+//            PARM=(DELTAL,LINECMP,                                     
+//            'UPDPDEL',                                                
+//            '')                                                       
+//NEWDD  DD DSN=PA.TEST.PA0067.IF110X3.WORKGDG.G0052V00,                
+//          DISP=SHR                                                    
+//OLDDD  DD DSN=PA.TEST.PA0067.IF110X3.WORKGDG.G0053V00,                
+//          DISP=SHR                                                    
+//OUTDD    DD DSN=PA.TEST.PA0067.IF110X3.ISRSUPC.OUTDD,                 
+//            DISP=(NEW,CATLG,DELETE),                                  
+//            LIKE=PA.TEST.PA0067.IF110X3.WORKGDG.G0052V00              
+//DELDD    DD DSN=PA.TEST.PA0067.IF110X3.ISRSUPC.DELTA,                 
+//            DISP=(NEW,CATLG,DELETE),                                  
+//            LIKE=PA.TEST.PA0067.IF110X3.WORKGDG.G0052V00
+END 1
+----------------------------------------------------------------------------------------------------
