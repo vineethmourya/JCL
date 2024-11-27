@@ -1,0 +1,188 @@
+JOINKEYS FILE 1 - VINEETH FAMILY MEMBERS AGE
+JOINKEYS FILE 2 - VINEETH FAMILY MEMBERS ROLE
+
+KEY - NAME (20 CHARACTERS STARTING POS 1)
+
+
+FILE 1 - PA.TEST.PA0067.IF110X3.JOINKEYS.F1
+VINEETH			30
+TSM				62
+SANTHI			58
+ABI				22
+SHANMUGAM		70
+CHOKALINGAM		70
+VASANTHA		65
+
+FILE 2 - PA.TEST.PA0067.IF110X3.JOINKEYS.F2
+VINEETH			SON
+TSM				FATHER
+SANTHI			MOTHER
+ABI				SISTER
+OTHERS 			RELATIVE
+
+***************************************************************************
+1.INNER JOIN:
+
+INPUT:
+//SYSIN    DD  *                            
+ JOINKEYS FILE=F1,FIELDS=(1,20,A)           
+ JOINKEYS FILE=F2,FIELDS=(1,20,A)           
+ REFORMAT FIELDS=(F1:1,20,F2:21,20,F1:21,20)
+ OPTION COPY                                
+/*                                          
+
+OUTPUT:
+ABI                 SISTER              22
+SANTHI              MOTHER              58
+TSM                 FATHER              62
+VINEETH             SON                 30
+
+***************************************************************************
+2. LEFT JOIN
+
+INPUT:
+//SYSIN    DD  *                            
+ JOINKEYS FILE=F1,FIELDS=(1,20,A)           
+ JOINKEYS FILE=F2,FIELDS=(1,20,A)           
+ REFORMAT FIELDS=(F1:1,20,F2:21,20,F1:21,20)
+ JOIN UNPAIRED,F1                           
+ OPTION COPY                                
+/*                                                                       
+
+OUTPUT:
+ABI                 SISTER              22
+CHOKALINGAM                             70
+SANTHI              MOTHER              58
+SHANMUGAM                               70
+TSM                 FATHER              62
+VASANTHA                                65
+VINEETH             SON                 30
+
+***************************************************************************
+3. RIGHT JOIN
+
+INPUT:
+//SYSIN    DD  *                            
+ JOINKEYS FILE=F1,FIELDS=(1,20,A)           
+ JOINKEYS FILE=F2,FIELDS=(1,20,A)           
+ REFORMAT FIELDS=(F1:1,20,F2:21,20,F1:21,20)
+ JOIN UNPAIRED,F2                           
+ OPTION COPY                                
+/*                                                                                                               
+
+OUTPUT:
+ABI                 SISTER              22
+                    RELATIVE              
+SANTHI              MOTHER              58
+TSM                 FATHER              62
+VINEETH             SON                 30
+
+***************************************************************************
+4.FULL JOIN
+
+INPUT:
+//SYSIN    DD  *                                    
+ JOINKEYS FILE=F1,FIELDS=(1,20,A)                   
+ JOINKEYS FILE=F2,FIELDS=(1,20,A)                   
+ REFORMAT FIELDS=(F1:1,20,F1:21,20,F2:1,20,F2:21,20)
+ JOIN UNPAIRED,F1,F2  	OR UNPAIRED                              
+ OPTION COPY                                        
+/*                                                  
+
+ABI                 22                  ABI                 SISTER  
+CHOKALINGAM         70                                              
+                                        OTHERS              RELATIVE
+SANTHI              58                  SANTHI              MOTHER  
+SHANMUGAM           70                                              
+TSM                 62                  TSM                 FATHER  
+VASANTHA            65                                              
+VINEETH             30                  VINEETH             SON     
+
+***************************************************************************
+5. GET THE UNMATCHED (AKA) UNPAIRED RECORDS FROM FILE 1.
+
+INPUT:
+//SYSIN    DD  *                 
+ JOINKEYS FILE=F1,FIELDS=(1,20,A)
+ JOINKEYS FILE=F2,FIELDS=(1,20,A)
+ REFORMAT FIELDS=(F1:1,80)       
+ JOIN UNPAIRED,F1,ONLY           
+ OPTION COPY                     
+/*                               
+
+OUTPUT:
+CHOKALINGAM         70
+SHANMUGAM           70
+VASANTHA            65
+***************************************************************************
+6. GET THE UNMATCHED (AKA) UNPAIRED RECORDS FROM FILE 2.
+
+INPUT:
+//SYSIN    DD  *                 
+ JOINKEYS FILE=F1,FIELDS=(1,20,A)
+ JOINKEYS FILE=F2,FIELDS=(1,20,A)
+ REFORMAT FIELDS=(F2:1,80)       
+ JOIN UNPAIRED,F2,ONLY           
+ OPTION COPY                     
+/*                               
+
+OUTPUT:
+OTHERS              RELATIVE
+***************************************************************************
+7. GET THE UNMATCHED (AKA) UNPAIRED RECORDS FROM FILE 1 AND FILE 2.
+
+INPUT:
+//SYSIN    DD  *                                    
+ JOINKEYS FILE=F1,FIELDS=(1,20,A)                   
+ JOINKEYS FILE=F2,FIELDS=(1,20,A)                   
+ REFORMAT FIELDS=(F1:1,20,F1:21,20,F2:1,20,F2:21,20)
+ JOIN UNPAIRED,F1,F2,ONLY		or UNPAIRED,ONLY                      
+ OPTION COPY                                        
+/*                                                                                 
+
+OUTPUT:
+CHOKALINGAM         70                                              
+                                        OTHERS              RELATIVE
+SHANMUGAM           70                                              
+VASANTHA            65                                              
+
+***************************************************************************
+https://www.ibm.com/docs/en/zos/2.1.0?topic=files-join-statement
+If you don't specify a JOIN statement for a JOINKEYS application, only paired records from F1 and F2 are kept and processed by the main task as the joined records. This is known as an inner join.
+
+You can change which records are kept and processed by the main task as the joined records by specifying a JOIN statement. You must specify the UNPAIRED operand. The F1, F2 and ONLY operands are optional. The JOIN operands you specify indicate the joined records to be kept and processed by the main task as follows:
+
+UNPAIRED,F1,F2 or UNPAIRED
+Unpaired records from F1 and F2 as well as paired records. This is known as a full outer join.
+
+UNPAIRED,F1
+Unpaired records from F1 as well as paired records. This is known as a left outer join.
+
+UNPAIRED,F2
+Unpaired records from F2 as well as paired records. This is known as a right outer join.
+
+UNPAIRED,F1,F2,ONLY or UNPAIRED,ONLY
+Unpaired records from F1 and F2.
+
+UNPAIRED,F1,ONLY
+Unpaired records from F1.
+
+UNPAIRED,F2,ONLY
+Unpaired records from F2.
+***************************************************************************
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
